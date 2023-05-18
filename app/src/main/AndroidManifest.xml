@@ -12,6 +12,24 @@
         android:theme="@style/Theme.HeadmanApplication"
         tools:targetApi="31">
         <activity
+            android:name=".Schedule.SaturdayActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Schedule.FridayActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Schedule.ThursdayActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Schedule.WednesdayActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Schedule.TuesdayActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Schedule.MondayActivity"
+            android:exported="false" />
+        <activity
             android:name=".GroupActivity"
             android:exported="false" />
         <activity
