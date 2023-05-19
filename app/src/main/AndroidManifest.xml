@@ -27,9 +27,6 @@
             android:name=".Schedule.TuesdayActivity"
             android:exported="false" />
         <activity
-            android:name=".Schedule.MondayActivity"
-            android:exported="false" />
-        <activity
             android:name=".GroupActivity"
             android:exported="false" />
         <activity

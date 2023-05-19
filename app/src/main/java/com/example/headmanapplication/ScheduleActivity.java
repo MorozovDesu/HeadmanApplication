@@ -2,16 +2,11 @@ package com.example.headmanapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.widget.ListView;
 
-import com.example.headmanapplication.Schedule.FridayActivity;
-import com.example.headmanapplication.Schedule.MondayActivity;
-import com.example.headmanapplication.Schedule.SaturdayActivity;
-import com.example.headmanapplication.Schedule.ThursdayActivity;
-import com.example.headmanapplication.Schedule.TuesdayActivity;
-import com.example.headmanapplication.Schedule.WednesdayActivity;
+import java.util.ArrayList;
+
 
 public class ScheduleActivity extends AppCompatActivity {
 
@@ -19,29 +14,18 @@ public class ScheduleActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule);
+        ArrayList<DayWeek> products = new ArrayList<DayWeek>();
+        if(products.size()==0){
+            products.add(new DayWeek("Понедельник"));
+            products.add(new DayWeek("Вторник"));
+            products.add(new DayWeek("Среда"));
+            products.add(new DayWeek("Четверг"));
+            products.add(new DayWeek("Пятница"));
+            products.add(new DayWeek("Суббота"));
+        }
+        ListView productList = findViewById(R.id.dayweekList);
+        DayAdapter adapter = new DayAdapter(this, R.layout.day_week, products);
+        productList.setAdapter(adapter);
     }
-    public void onClickMonday(View view){
-        Intent intent = new Intent(this, MondayActivity.class);
-        startActivity(intent);
-    }
-    public void onClickTuesday(View view){
-        Intent intent = new Intent(this, TuesdayActivity.class);
-        startActivity(intent);
-    }
-    public void onClickWednesday(View view){
-        Intent intent = new Intent(this, WednesdayActivity.class);
-        startActivity(intent);
-    }
-    public void onClickThursday(View view){
-        Intent intent = new Intent(this, ThursdayActivity.class);
-        startActivity(intent);
-    }
-    public void onClickFriday(View view){
-        Intent intent = new Intent(this, FridayActivity.class);
-        startActivity(intent);
-    }
-    public void onClickSaturday(View view){
-        Intent intent = new Intent(this, SaturdayActivity.class);
-        startActivity(intent);
-    }
+
 }

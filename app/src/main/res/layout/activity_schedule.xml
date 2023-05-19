@@ -1,93 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ScheduleActivity">
-
-    <Button
-        android:id="@+id/buttonMonday"
-        android:layout_width="306dp"
-        android:layout_height="48dp"
-        android:layout_marginBottom="20dp"
-        android:text="@string/Monday"
-        android:onClick="onClickMonday"
-        app:layout_constraintBottom_toTopOf="@+id/buttonTuesday"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="UsingOnClickInXml" />
-
-    <Button
-        android:id="@+id/buttonTuesday"
-        android:layout_width="306dp"
-        android:layout_height="48dp"
-        android:layout_marginBottom="20dp"
-        android:text="@string/Tuesday"
-        android:onClick="onClickTuesday"
-        app:layout_constraintBottom_toTopOf="@+id/buttonWednesday"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonMonday"
-        tools:ignore="UsingOnClickInXml" />
-
-
-    <Button
-        android:id="@+id/buttonWednesday"
-        android:layout_width="306dp"
-        android:layout_height="48dp"
-        android:layout_marginBottom="20dp"
-        android:text="@string/Wednesday"
-        android:onClick="onClickWednesday"
-        app:layout_constraintBottom_toTopOf="@+id/buttonThursday"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonTuesday"
-        tools:ignore="UsingOnClickInXml" />
-
-    <Button
-        android:id="@+id/buttonThursday"
-        android:layout_width="306dp"
-        android:layout_height="48dp"
-        android:layout_marginBottom="20dp"
-        android:text="@string/Thursday"
-        android:onClick="onClickThursday"
-        app:layout_constraintBottom_toTopOf="@+id/buttonFriday"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonWednesday"
-        tools:ignore="UsingOnClickInXml" />
-    <Button
-        android:id="@+id/buttonFriday"
-        android:layout_width="306dp"
-        android:layout_height="48dp"
-        android:layout_marginBottom="20dp"
-        android:text="@string/Friday"
-        android:onClick="onClickFriday"
-        app:layout_constraintBottom_toTopOf="@+id/buttonSaturday"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonThursday"
-        tools:ignore="UsingOnClickInXml" />
-
-    <Button
-        android:id="@+id/buttonSaturday"
-        android:layout_width="306dp"
-        android:layout_height="48dp"
-        android:text="@string/Saturday"
-        android:onClick="onClickSaturday"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="16dp">
+    <ListView
+        android:id="@+id/dayweekList"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonFriday"
-        tools:ignore="UsingOnClickInXml" />
-
-
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
