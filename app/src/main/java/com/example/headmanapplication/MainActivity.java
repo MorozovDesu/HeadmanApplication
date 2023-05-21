@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
     public void onClickSchedule(View view){
-        Intent intent = new Intent(this, ScheduleActivity.class);
+        Intent intent = new Intent(this, DayOfWeekActivity.class);
         startActivity(intent);
     }
     public void onClickStatistics(View view){
