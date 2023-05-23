@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
 import android.content.Context;
 
-import com.example.headmanapplication.data.Schedule;
+import com.example.headmanapplication.data.WeekSchedule;
 import com.example.headmanapplication.data.Week;
 
 import java.time.DayOfWeek;
@@ -132,32 +132,65 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(SCHEDULE_COLUMN_SUBJECT_4, subject4);
         values.put(SCHEDULE_COLUMN_SUBJECT_5, subject5);
         db.insert(TABLE_SCHEDULE, null, values);
+
         db.close();
     }
-    public Schedule getScheduleForDay(DayOfWeek day) {
-        Schedule schedule = new Schedule();
+
+    public WeekSchedule getScheduleForDay(DayOfWeek day) {
+        if (day == null) {
+            return null;
+        }
+
+        WeekSchedule weekSchedule = new WeekSchedule();
         String selectQuery = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             selectQuery = "SELECT * FROM " + TABLE_SCHEDULE + " WHERE " + SCHEDULE_COLUMN_DAY_OF_WEEK + "=" + day.getValue();
         }
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
+
         if (cursor.moveToFirst()) {
-            schedule.setSubject1(cursor.getString(2));
-            schedule.setSubject2(cursor.getString(3));
-            schedule.setSubject3(cursor.getString(4));
-            schedule.setSubject4(cursor.getString(5));
-            schedule.setSubject5(cursor.getString(6));
+            weekSchedule.setSubject1(cursor.getString(2));
+            weekSchedule.setSubject2(cursor.getString(3));
+            weekSchedule.setSubject3(cursor.getString(4));
+            weekSchedule.setSubject4(cursor.getString(5));
+            weekSchedule.setSubject5(cursor.getString(6));
         }
+
         cursor.close();
         db.close();
-        return schedule;
+        return weekSchedule;
     }
     // Удаление записи из таблицы "week"
     public void deleteWeek(Week week) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_WEEKS, WEEKS_COLUMN_ID + "=?", new String[]{String.valueOf(week.getId())});
         db.close();
+    }
+    public List<WeekSchedule> getWeekSchedule() {
+        List<WeekSchedule> weekScheduleList = new ArrayList<>();
+        String selectQuery = "SELECT * FROM " + TABLE_WEEKS +
+                " INNER JOIN " + TABLE_SCHEDULE +
+                " ON " + TABLE_WEEKS + "." + WEEKS_COLUMN_DAY_OF_WEEK + " = " + TABLE_SCHEDULE + "." + SCHEDULE_COLUMN_DAY_OF_WEEK;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                WeekSchedule weekSchedule = new WeekSchedule();
+                weekSchedule.setWeekId(cursor.getInt(0));
+                weekSchedule.setDayOfWeek(cursor.getInt(1));
+                weekSchedule.setIsEvenWeek(cursor.getInt(2));
+                weekSchedule.setSubject1(cursor.getString(4));
+                weekSchedule.setSubject2(cursor.getString(5));
+                weekSchedule.setSubject3(cursor.getString(6));
+                weekSchedule.setSubject4(cursor.getString(7));
+                weekSchedule.setSubject5(cursor.getString(8));
+                weekScheduleList.add(weekSchedule);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return weekScheduleList;
     }
 
     // Получение количества записей в таблице "week"

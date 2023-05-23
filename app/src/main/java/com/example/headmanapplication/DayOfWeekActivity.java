@@ -65,13 +65,12 @@ public class DayOfWeekActivity extends AppCompatActivity {
 
         // Добавить несколько тестовых данных в таблицу "week"
         if (databaseHelper.getWeeksCount() == 0) {
-            for (int i = 1; i <= 6; i++) {
-                databaseHelper.addWeek(i,0);
-            }
-            for (int i = 1; i <= 6; i++) {
-                databaseHelper.addWeek(i,1);
+            for (int i = 1; i <= 7; i++) {
+                databaseHelper.addWeek(i, 0);
+                databaseHelper.addWeek(i, 1);
             }
         }
+
         // Получаю все недели из таблицы "week"
         weekList = databaseHelper.getAllWeeks();
 
@@ -93,12 +92,23 @@ public class DayOfWeekActivity extends AppCompatActivity {
                 // Получаю выбранную неделю
                 Week selectedWeek = weekList.get(position);
 
+                // Проверка на отсутствие данных в базе для выбранной недели
+                if (selectedWeek == null) {
+                    return;
+                }
+
+                // Проверка на корректность значения четности недели
+                int isEvenWeek = selectedWeek.getIsEvenWeek();
+                if (isEvenWeek != 0 && isEvenWeek != 1) {
+                    return;
+                }
+
                 // Создаю Intent для запуска ScheduleActivity
                 Intent intent = new Intent(DayOfWeekActivity.this, ScheduleActivity.class);
 
                 // Передаю значения выбранного дня недели и четности недели в ScheduleActivity
                 intent.putExtra("day_of_week", selectedWeek.getDayOfWeek());
-                intent.putExtra("is_even_week", selectedWeek.getIsEvenWeek());
+                intent.putExtra("is_even_week", isEvenWeek);
 
                 // Запустить ScheduleActivity
                 startActivity(intent);
@@ -107,9 +117,9 @@ public class DayOfWeekActivity extends AppCompatActivity {
 
         // Установить заголовок активности на основе выбранного дня недели (если есть)
         int dayOfWeek = getIntent().getIntExtra("day_of_week", -1);
-        if (dayOfWeek != -1) {
+        if(dayOfWeek != -1) {
             String selectedDay = getDayNameFromNumber(dayOfWeek);
-            TextView titleView = findViewById(R.id.title_view);
+            @SuppressLint("WrongViewCast") TextView titleView = findViewById(R.id.list);
             titleView.setText(selectedDay);
         }
     }
@@ -129,6 +139,8 @@ public class DayOfWeekActivity extends AppCompatActivity {
                 return "Пятница";
             case 6:
                 return "Суббота";
+            case 7:
+                return "Воскресенье";
             default:
                 return "";
         }
@@ -143,5 +155,3 @@ public class DayOfWeekActivity extends AppCompatActivity {
         }
     }
 }
-
-

@@ -1,11 +1,38 @@
 package com.example.headmanapplication.data;
 
-public class Schedule {
+public class WeekSchedule {
+    private int weekId;
+    private int dayOfWeek;
+    private int isEvenWeek;
     private String subject1;
     private String subject2;
     private String subject3;
     private String subject4;
     private String subject5;
+
+    public int getWeekId() {
+        return weekId;
+    }
+
+    public void setWeekId(int weekId) {
+        this.weekId = weekId;
+    }
+
+    public int getDayOfWeek() {
+        return dayOfWeek;
+    }
+
+    public void setDayOfWeek(int dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
+    }
+
+    public int getIsEvenWeek() {
+        return isEvenWeek;
+    }
+
+    public void setIsEvenWeek(int isEvenWeek) {
+        this.isEvenWeek = isEvenWeek;
+    }
 
     public String getSubject1() {
         return subject1;
