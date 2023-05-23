@@ -1,4 +1,4 @@
-package com.example.headmanapplication.DB;
+package com.example.headmanapplication.data;
 
 public class Week {
     private int id;

@@ -1,12 +1,17 @@
 package com.example.headmanapplication.DB;
 
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
 import android.content.Context;
 
+import com.example.headmanapplication.data.Schedule;
+import com.example.headmanapplication.data.Week;
+
+import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +36,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String SCHEDULE_COLUMN_SUBJECT_3 = "subject_3";
     private static final String SCHEDULE_COLUMN_SUBJECT_4 = "subject_4";
     private static final String SCHEDULE_COLUMN_SUBJECT_5 = "subject_5";
+
+    private boolean isEvenChecked = false; // флаг для отображения четных/нечетных дней
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, SCHEMA);
@@ -69,7 +76,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     //////////////////////////////////////////////////////////////////////////////////
     // Добавление записи в таблицу "week"
-    // Добавление записи в таблицу "week"
     public void addWeek(int dayOfWeek, int isEvenWeek) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -82,7 +88,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Получение всех записей из таблицы "week"
     public List<Week> getAllWeeks() {
         List<Week> weekList = new ArrayList<>();
-        String selectQuery = "SELECT * FROM " + TABLE_WEEKS;
+        String selectQuery;
+        if (isEvenChecked) {
+            selectQuery = "SELECT * FROM " + TABLE_WEEKS + " WHERE " + WEEKS_COLUMN_IS_EVEN_WEEK + "=1";
+        } else {
+            selectQuery = "SELECT * FROM " + TABLE_WEEKS + " WHERE " + WEEKS_COLUMN_IS_EVEN_WEEK + "=0";
+        }
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
@@ -98,7 +109,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return weekList;
     }
-
+    public void switchEven() {
+        isEvenChecked = !isEvenChecked;
+    }
     // Обновление записи в таблице "week"
     public void updateWeek(Week week) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -108,7 +121,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.update(TABLE_WEEKS, values, WEEKS_COLUMN_ID + "=?", new String[]{String.valueOf(week.getId())});
         db.close();
     }
-
+    @SuppressLint("NewApi")
+    public void addSchedule(DayOfWeek day, String subject1, String subject2, String subject3, String subject4, String subject5) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(SCHEDULE_COLUMN_DAY_OF_WEEK, day.getValue());
+        values.put(SCHEDULE_COLUMN_SUBJECT_1, subject1);
+        values.put(SCHEDULE_COLUMN_SUBJECT_2, subject2);
+        values.put(SCHEDULE_COLUMN_SUBJECT_3, subject3);
+        values.put(SCHEDULE_COLUMN_SUBJECT_4, subject4);
+        values.put(SCHEDULE_COLUMN_SUBJECT_5, subject5);
+        db.insert(TABLE_SCHEDULE, null, values);
+        db.close();
+    }
+    public Schedule getScheduleForDay(DayOfWeek day) {
+        Schedule schedule = new Schedule();
+        String selectQuery = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            selectQuery = "SELECT * FROM " + TABLE_SCHEDULE + " WHERE " + SCHEDULE_COLUMN_DAY_OF_WEEK + "=" + day.getValue();
+        }
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            schedule.setSubject1(cursor.getString(2));
+            schedule.setSubject2(cursor.getString(3));
+            schedule.setSubject3(cursor.getString(4));
+            schedule.setSubject4(cursor.getString(5));
+            schedule.setSubject5(cursor.getString(6));
+        }
+        cursor.close();
+        db.close();
+        return schedule;
+    }
     // Удаление записи из таблицы "week"
     public void deleteWeek(Week week) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -126,5 +170,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return count;
     }
+
     //////////////////////////////////////////////////////////////////////////////////
 }
