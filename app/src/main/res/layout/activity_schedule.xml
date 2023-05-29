@@ -7,44 +7,60 @@
         android:id="@+id/subject1_textview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
+        android:layout_marginTop="68dp"
+        android:background="#EEEEEE"
         android:padding="16dp"
-        android:background="#EEEEEE"/>
-
-    <TextView
-        android:id="@+id/subject2_textview"
-        android:layout_below="@id/subject1_textview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:padding="16dp"
-        android:background="#FFFFFF"/>
+        android:onClick="onDayOfWeekClick"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/subject3_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@id/subject2_textview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
+        android:background="#EEEEEE"
         android:padding="16dp"
-        android:background="#EEEEEE"/>
-
-    <TextView
-        android:id="@+id/subject4_textview"
-        android:layout_below="@id/subject3_textview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:padding="16dp"
-        android:background="#FFFFFF"/>
+        android:onClick="onDayOfWeekClick"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/subject5_textview"
-        android:layout_below="@id/subject4_textview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
+        android:layout_below="@id/subject4_textview"
+        android:background="#EEEEEE"
         android:padding="16dp"
-        android:background="#EEEEEE"/>
+        android:onClick="onDayOfWeekClick"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/subject4_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/subject3_textview"
+        android:background="#FFFFFF"
+        android:padding="16dp"
+        android:onClick="onDayOfWeekClick"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/subject2_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/subject1_textview"
+        android:background="#FFFFFF"
+        android:padding="16dp"
+        android:onClick="onDayOfWeekClick"
+        android:textSize="20sp" />
+
+<!--    <Button-->
+<!--        android:id="@+id/add_schedule_button"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentTop="true"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:layout_gravity="center_horizontal"-->
+<!--        android:onClick="onAddScheduleButtonClick"-->
+<!--        android:text="Добавить расписание" />-->
 
 </RelativeLayout>

@@ -1,5 +1,9 @@
 package com.example.headmanapplication.data;
 
+import android.os.Build;
+
+import java.time.DayOfWeek;
+
 public class WeekSchedule {
     private int weekId;
     private int dayOfWeek;
@@ -9,6 +13,31 @@ public class WeekSchedule {
     private String subject3;
     private String subject4;
     private String subject5;
+
+    public WeekSchedule(DayOfWeek dayOfWeek, String subject1, String subject2, String subject3, String subject4, String subject5) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            this.dayOfWeek = dayOfWeek.getValue();
+        }
+        this.subject1 = subject1;
+        this.subject2 = subject2;
+        this.subject3 = subject3;
+        this.subject4 = subject4;
+        this.subject5 = subject5;
+    }
+    public WeekSchedule(int weekId, int dayOfWeek, int isEvenWeek, String subject1, String subject2, String subject3, String subject4, String subject5) {
+        this.weekId = weekId;
+        this.dayOfWeek = dayOfWeek;
+        this.isEvenWeek = isEvenWeek;
+        this.subject1 = subject1;
+        this.subject2 = subject2;
+        this.subject3 = subject3;
+        this.subject4 = subject4;
+        this.subject5 = subject5;
+    }
+    public WeekSchedule() {
+
+    }
+
 
     public int getWeekId() {
         return weekId;

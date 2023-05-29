@@ -121,47 +121,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.update(TABLE_WEEKS, values, WEEKS_COLUMN_ID + "=?", new String[]{String.valueOf(week.getId())});
         db.close();
     }
-    @SuppressLint("NewApi")
-    public void addSchedule(DayOfWeek day, String subject1, String subject2, String subject3, String subject4, String subject5) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(SCHEDULE_COLUMN_DAY_OF_WEEK, day.getValue());
-        values.put(SCHEDULE_COLUMN_SUBJECT_1, subject1);
-        values.put(SCHEDULE_COLUMN_SUBJECT_2, subject2);
-        values.put(SCHEDULE_COLUMN_SUBJECT_3, subject3);
-        values.put(SCHEDULE_COLUMN_SUBJECT_4, subject4);
-        values.put(SCHEDULE_COLUMN_SUBJECT_5, subject5);
-        db.insert(TABLE_SCHEDULE, null, values);
-
-        db.close();
-    }
-
-    public WeekSchedule getScheduleForDay(DayOfWeek day) {
-        if (day == null) {
-            return null;
-        }
-
-        WeekSchedule weekSchedule = new WeekSchedule();
-        String selectQuery = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            selectQuery = "SELECT * FROM " + TABLE_SCHEDULE + " WHERE " + SCHEDULE_COLUMN_DAY_OF_WEEK + "=" + day.getValue();
-        }
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-
-        if (cursor.moveToFirst()) {
-            weekSchedule.setSubject1(cursor.getString(2));
-            weekSchedule.setSubject2(cursor.getString(3));
-            weekSchedule.setSubject3(cursor.getString(4));
-            weekSchedule.setSubject4(cursor.getString(5));
-            weekSchedule.setSubject5(cursor.getString(6));
-        }
-
-        cursor.close();
-        db.close();
-        return weekSchedule;
-    }
-    // Удаление записи из таблицы "week"
     public void deleteWeek(Week week) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_WEEKS, WEEKS_COLUMN_ID + "=?", new String[]{String.valueOf(week.getId())});
@@ -170,7 +129,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public List<WeekSchedule> getWeekSchedule() {
         List<WeekSchedule> weekScheduleList = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + TABLE_WEEKS +
-                " INNER JOIN " + TABLE_SCHEDULE +
+                " LEFT JOIN " + TABLE_SCHEDULE +
                 " ON " + TABLE_WEEKS + "." + WEEKS_COLUMN_DAY_OF_WEEK + " = " + TABLE_SCHEDULE + "." + SCHEDULE_COLUMN_DAY_OF_WEEK;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -203,6 +162,82 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return count;
     }
+    @SuppressLint("NewApi")
+    public void addSchedule(DayOfWeek day, String subject1, String subject2, String subject3, String subject4, String subject5) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(SCHEDULE_COLUMN_DAY_OF_WEEK, day.getValue());
+        values.put(SCHEDULE_COLUMN_SUBJECT_1, subject1);
+        values.put(SCHEDULE_COLUMN_SUBJECT_2, subject2);
+        values.put(SCHEDULE_COLUMN_SUBJECT_3, subject3);
+        values.put(SCHEDULE_COLUMN_SUBJECT_4, subject4);
+        values.put(SCHEDULE_COLUMN_SUBJECT_5, subject5);
+        db.insert(TABLE_SCHEDULE, null, values);
+
+        db.close();
+    }
+    @SuppressLint("NewApi")
+    public void updateSchedule(DayOfWeek day, String subject1, String subject2, String subject3, String subject4, String subject5) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(SCHEDULE_COLUMN_SUBJECT_1, subject1);
+        values.put(SCHEDULE_COLUMN_SUBJECT_2, subject2);
+        values.put(SCHEDULE_COLUMN_SUBJECT_3, subject3);
+        values.put(SCHEDULE_COLUMN_SUBJECT_4, subject4);
+        values.put(SCHEDULE_COLUMN_SUBJECT_5, subject5);
+        db.update(TABLE_SCHEDULE, values, SCHEDULE_COLUMN_DAY_OF_WEEK + "=?", new String[]{String.valueOf(day.getValue())});
+        db.close();
+    }
+
+    @SuppressLint("NewApi")
+    public void deleteSchedule(DayOfWeek day) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_SCHEDULE, SCHEDULE_COLUMN_DAY_OF_WEEK + "=?", new String[]{String.valueOf(day.getValue())});
+        db.close();
+    }
+    public WeekSchedule getScheduleForDay(DayOfWeek day) {
+        if (day == null) {
+            return null;
+        }
+
+        WeekSchedule weekSchedule = new WeekSchedule();
+        String selectQuery = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            selectQuery = "SELECT * FROM " + TABLE_SCHEDULE + " WHERE " + SCHEDULE_COLUMN_DAY_OF_WEEK + "=" + day.getValue();
+        }
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            weekSchedule.setSubject1(cursor.getString(2));
+            weekSchedule.setSubject2(cursor.getString(3));
+            weekSchedule.setSubject3(cursor.getString(4));
+            weekSchedule.setSubject4(cursor.getString(5));
+            weekSchedule.setSubject5(cursor.getString(6));
+        }
+
+        cursor.close();
+        db.close();
+        return weekSchedule;
+    }
+
+    public boolean updateScheduleForDay(WeekSchedule weekSchedule) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(SCHEDULE_COLUMN_SUBJECT_1, weekSchedule.getSubject1());
+        values.put(SCHEDULE_COLUMN_SUBJECT_2, weekSchedule.getSubject2());
+        values.put(SCHEDULE_COLUMN_SUBJECT_3, weekSchedule.getSubject3());
+        values.put(SCHEDULE_COLUMN_SUBJECT_4, weekSchedule.getSubject4());
+        values.put(SCHEDULE_COLUMN_SUBJECT_5, weekSchedule.getSubject5());
+
+        int result = db.update(TABLE_SCHEDULE, values, SCHEDULE_COLUMN_DAY_OF_WEEK + "=?",
+                new String[]{String.valueOf(weekSchedule.getDayOfWeek())});
+
+        db.close();
+
+        return result != 0;
+    }
+
 
     //////////////////////////////////////////////////////////////////////////////////
 }

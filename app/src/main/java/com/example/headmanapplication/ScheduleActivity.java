@@ -3,8 +3,10 @@ package com.example.headmanapplication;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,11 +37,44 @@ public class ScheduleActivity extends AppCompatActivity {
         subject4TextView = findViewById(R.id.subject4_textview);
         subject5TextView = findViewById(R.id.subject5_textview);
 
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ScheduleActivity.this, EditScheduleActivity.class);
+                intent.putExtra("day_of_week", getIntent().getIntExtra("day_of_week", 0));
+
+                switch (v.getId()) {
+                    case R.id.subject1_textview:
+                        // передаем номер предмета в Intent
+                        intent.putExtra("subject_number", 1);
+                        break;
+                    case R.id.subject2_textview:
+                        intent.putExtra("subject_number", 2);
+                        break;
+                    case R.id.subject3_textview:
+                        intent.putExtra("subject_number", 3);
+                        break;
+                    case R.id.subject4_textview:
+                        intent.putExtra("subject_number", 4);
+                        break;
+                    case R.id.subject5_textview:
+                        intent.putExtra("subject_number", 5);
+                        break;
+                }
+
+                startActivity(intent);
+            }
+        };
+        subject1TextView.setOnClickListener(listener);
+        subject2TextView.setOnClickListener(listener);
+        subject3TextView.setOnClickListener(listener);
+        subject4TextView.setOnClickListener(listener);
+        subject5TextView.setOnClickListener(listener);
         // Инициализируем объект DatabaseHelper
         databaseHelper = new DatabaseHelper(this);
 
         // Получаем день недели из интента
-        int dayOfWeekValue = getIntent().getIntExtra("dayOfWeek", 0);
+        int dayOfWeekValue = getIntent().getIntExtra("day_of_week", 0);
 
         DayOfWeek dayOfWeek = null;
         if (dayOfWeekValue >= 1 && dayOfWeekValue <= 7) {

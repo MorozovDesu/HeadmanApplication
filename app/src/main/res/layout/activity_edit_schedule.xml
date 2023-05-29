@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_edit_schedule"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EditScheduleActivity">
+
+    <EditText
+        android:id="@+id/subject1_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Предмет 1" />
+
+    <EditText
+        android:id="@+id/subject2_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/subject1_edittext"
+        android:hint="Предмет 2" />
+
+    <EditText
+        android:id="@+id/subject3_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/subject2_edittext"
+        android:hint="Предмет 3" />
+
+    <EditText
+        android:id="@+id/subject4_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/subject3_edittext"
+        android:hint="Предмет 4" />
+
+    <EditText
+        android:id="@+id/subject5_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/subject4_edittext"
+        android:hint="Предмет 5" />
+
+    <Button
+        android:id="@+id/save_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/subject5_edittext"
+        android:onClick="onSaveButtonClick"
+        android:text="Сохранить" />
+
+</RelativeLayout>
