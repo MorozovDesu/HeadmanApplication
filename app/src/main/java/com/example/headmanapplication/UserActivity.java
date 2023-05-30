@@ -17,7 +17,6 @@ import com.example.headmanapplication.DB.DatabaseHelper;
 
 public class UserActivity extends AppCompatActivity {
     EditText nameBox;
-    EditText yearBox;
     Button delButton;
     Button saveButton;
 

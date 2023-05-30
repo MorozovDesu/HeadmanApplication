@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,12 +38,28 @@ public class ScheduleActivity extends AppCompatActivity {
         subject4TextView = findViewById(R.id.subject4_textview);
         subject5TextView = findViewById(R.id.subject5_textview);
 
-        View.OnClickListener listener = new View.OnClickListener() {
+
+        Button editSubjectButton = findViewById(R.id.edit_subject_button);
+        editSubjectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ScheduleActivity.this, EditScheduleActivity.class);
                 intent.putExtra("day_of_week", getIntent().getIntExtra("day_of_week", 0));
+                intent.putExtra("subject_number", String.valueOf(v.getTag()));
+                startActivity(intent);
+            }
+        });
 
+        subject1TextView.setTag(1);
+        subject2TextView.setTag(2);
+        subject3TextView.setTag(3);
+        subject4TextView.setTag(4);
+        subject5TextView.setTag(5);
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ScheduleActivity.this, AttendanceActivity.class);
+                intent.putExtra("day_of_week", getIntent().getIntExtra("day_of_week", 0));
                 switch (v.getId()) {
                     case R.id.subject1_textview:
                         // передаем номер предмета в Intent
@@ -61,7 +78,6 @@ public class ScheduleActivity extends AppCompatActivity {
                         intent.putExtra("subject_number", 5);
                         break;
                 }
-
                 startActivity(intent);
             }
         };
@@ -70,6 +86,7 @@ public class ScheduleActivity extends AppCompatActivity {
         subject3TextView.setOnClickListener(listener);
         subject4TextView.setOnClickListener(listener);
         subject5TextView.setOnClickListener(listener);
+
         // Инициализируем объект DatabaseHelper
         databaseHelper = new DatabaseHelper(this);
 

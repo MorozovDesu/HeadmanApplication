@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
 import android.content.Context;
 
+import com.example.headmanapplication.data.Attendance;
+import com.example.headmanapplication.data.User;
 import com.example.headmanapplication.data.WeekSchedule;
 import com.example.headmanapplication.data.Week;
 
@@ -16,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME = "userstore.db"; // название бд
+    private static final String DATABASE_NAME = "userstore_new.db"; // название бд
     private static final int SCHEMA = 1; // версия базы данных
     public static final String TABLE = "users"; // название таблицы в бд
     // названия столбцов
@@ -36,6 +38,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String SCHEDULE_COLUMN_SUBJECT_3 = "subject_3";
     private static final String SCHEDULE_COLUMN_SUBJECT_4 = "subject_4";
     private static final String SCHEDULE_COLUMN_SUBJECT_5 = "subject_5";
+    //другая таблица
+    private static final String TABLE_ATTENDANCE = "attendance";
+    private static final String ATTENDANCE_COLUMN_ID = "_id";
+    private static final String ATTENDANCE_COLUMN_USER_ID = "user_id";
+    private static final String ATTENDANCE_COLUMN_IS_PRESENT = "is_present";
 
     private boolean isEvenChecked = false; // флаг для отображения четных/нечетных дней
 
@@ -68,7 +75,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 SCHEDULE_COLUMN_SUBJECT_3 + " TEXT," +
                 SCHEDULE_COLUMN_SUBJECT_4 + " TEXT," +
                 SCHEDULE_COLUMN_SUBJECT_5 + " TEXT)");
+
+        String CREATE_ATTENDANCE_TABLE = "CREATE TABLE " + TABLE_ATTENDANCE + "("
+                + ATTENDANCE_COLUMN_ID + " INTEGER PRIMARY KEY,"
+                + ATTENDANCE_COLUMN_USER_ID + " INTEGER,"
+                + ATTENDANCE_COLUMN_IS_PRESENT + " INTEGER,"
+                + "FOREIGN KEY(" + ATTENDANCE_COLUMN_USER_ID + ") REFERENCES " + TABLE + "(" + COLUMN_ID + ")" +
+                ")";
+        db.execSQL(CREATE_ATTENDANCE_TABLE);
     }
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion,  int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS "+TABLE);
@@ -237,7 +253,96 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return result != 0;
     }
+    public void addAttendance(int userId, boolean isPresent) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(ATTENDANCE_COLUMN_USER_ID, userId);
+        values.put(ATTENDANCE_COLUMN_IS_PRESENT, isPresent ? 1 : 0);
+        db.insert(TABLE_ATTENDANCE, null, values);
+        db.close();
+    }
 
+    public boolean updateAttendance(int attendanceId, boolean isPresent) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(ATTENDANCE_COLUMN_IS_PRESENT, isPresent ? 1 : 0);
 
+        int result = db.update(TABLE_ATTENDANCE, values, ATTENDANCE_COLUMN_ID + "=?",
+                new String[]{String.valueOf(attendanceId)});
+
+        db.close();
+
+        return result != 0;
+    }
+
+    public List<Attendance> getAttendanceForUser(int userId) {
+        List<Attendance> attendanceList = new ArrayList<>();
+        String selectQuery = "SELECT * FROM " + TABLE_ATTENDANCE +
+                " WHERE " + ATTENDANCE_COLUMN_USER_ID + "=?";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, new String[]{String.valueOf(userId)});
+        if (cursor.moveToFirst()) {
+            do {
+                Attendance attendance = new Attendance();
+                attendance.setId(Integer.parseInt(cursor.getString(0)));
+                attendance.setUserId(Integer.parseInt(cursor.getString(1)));
+                attendance.setPresent(cursor.getInt(2) == 1);
+                attendanceList.add(attendance);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return attendanceList;
+    }
     //////////////////////////////////////////////////////////////////////////////////
+    public List<User> getAllUsers() {
+        List<User> userList = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor cursor = db.query(TABLE,
+                new String[]{COLUMN_ID, COLUMN_NAME},
+                null, null, null, null, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") User user = new User(
+                        cursor.getInt(cursor.getColumnIndex(COLUMN_ID)),
+                        cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
+
+                userList.add(user);
+            } while (cursor.moveToNext());
+        }
+
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        return userList;
+    }
+    public boolean isAttendancePresent(int userId) {
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor cursor = db.query(TABLE_ATTENDANCE,
+                new String[]{ATTENDANCE_COLUMN_IS_PRESENT},
+                COLUMN_ID + " = ?",
+                new String[]{String.valueOf(userId)},
+                null, null, null);
+
+        boolean isPresent = false;
+
+        if (cursor != null && cursor.moveToFirst()) {
+            @SuppressLint("Range") int presentInt = cursor.getInt(cursor.getColumnIndex(ATTENDANCE_COLUMN_IS_PRESENT));
+            isPresent = (presentInt == 1);
+        }
+
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        return isPresent;
+    }
+
+
+
+
 }

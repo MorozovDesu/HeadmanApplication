@@ -53,14 +53,12 @@
         android:onClick="onDayOfWeekClick"
         android:textSize="20sp" />
 
-<!--    <Button-->
-<!--        android:id="@+id/add_schedule_button"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_alignParentTop="true"-->
-<!--        android:layout_centerHorizontal="true"-->
-<!--        android:layout_gravity="center_horizontal"-->
-<!--        android:onClick="onAddScheduleButtonClick"-->
-<!--        android:text="Добавить расписание" />-->
+    <Button
+        android:id="@+id/edit_subject_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Изменить предметы"
+        android:onClick="onEditSubjectClick"
+        android:visibility="visible" />
 
 </RelativeLayout>
